@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-cream text-ink font-sans antialiased;
+  }
+  ::selection {
+    @apply bg-primary-300/50;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/60 shadow-soft;
+  }
+  .card-bento {
+    @apply bg-white rounded-bento shadow-soft border border-primary-100/60;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary-600 to-pinky-400 text-white font-semibold px-6 py-3 shadow-lift transition-all duration-300 hover:scale-[1.03] hover:shadow-glow active:scale-95;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-pinky-300 text-pinky-600 bg-white/70 font-semibold px-6 py-3 transition-all duration-300 hover:bg-pinky-50 hover:scale-[1.03] active:scale-95;
+  }
+  .input-field {
+    @apply w-full rounded-2xl border-2 border-primary-100 bg-primary-50/50 px-4 py-3 text-sm text-ink placeholder-inkSoft/50 outline-none transition-all duration-200 focus:border-primary-400 focus:bg-white focus:shadow-glow;
+  }
+  .section-badge {
+    @apply inline-flex items-center gap-2 rounded-full bg-primary-100 text-primary-700 text-xs font-bold uppercase tracking-wider px-4 py-1.5;
+  }
+}
+
+/* Hide number input spinners */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
