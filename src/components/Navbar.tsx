@@ -23,12 +23,7 @@ export default function Navbar({ page, onNavigate, onRequestLogout }: NavbarProp
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  const userInitial = (account?.name || 'N').trim().charAt(0).toUpperCase();
-  const userFirstName = (account?.name || 'Nasabah').split(' ')[0];
-
-  const links = account
-    ? [...baseLinks, { key: 'profil' as PageKey, label: 'Profil Saya' }]
-    : baseLinks;
+  const links = baseLinks;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -79,52 +74,26 @@ export default function Navbar({ page, onNavigate, onRequestLogout }: NavbarProp
 
         <div className="flex items-center gap-2">
           {account ? (
-            <>
-              {/* User Avatar + Name (Clickable to open Profil Saya) */}
-              <div className="hidden md:flex items-center gap-1.5 rounded-full bg-white/80 border border-primary-200 pl-1 pr-1.5 py-1 shadow-soft">
-                <button
-                  onClick={() => go('profil')}
-                  className={`flex items-center gap-2 rounded-full pl-1 pr-2.5 py-1 transition-all ${page === 'profil'
-                      ? 'bg-gradient-to-r from-primary-100 to-pinky-100 text-primary-800'
-                      : 'hover:bg-primary-50 text-ink'
-                    }`}
-                  title="Buka Profil Saya"
-                >
-                  <span className="w-7 h-7 rounded-full bg-gradient-to-br from-primary-400 to-pinky-400 flex items-center justify-center text-[11px] font-extrabold text-white shadow-soft">
-                    {userInitial}
-                  </span>
-                  <span className="max-w-[7rem] truncate text-xs font-bold">
-                    {userFirstName}
-                  </span>
-                </button>
-                <button
-                  onClick={onRequestLogout}
-                  className="w-7 h-7 rounded-full flex items-center justify-center text-inkSoft hover:text-pinky-600 hover:bg-pinky-100 transition-colors"
-                  aria-label="Keluar dari simulasi"
-                  title="Keluar (Simulasi)"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              {/* Mobile Quick Profile & Logout buttons */}
-              <div className="md:hidden flex items-center gap-1">
-                <button
-                  onClick={() => go('profil')}
-                  className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-400 to-pinky-400 flex items-center justify-center text-xs font-extrabold text-white shadow-soft"
-                  title="Profil"
-                >
-                  {userInitial}
-                </button>
-                <button
-                  onClick={onRequestLogout}
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-inkSoft hover:text-pinky-600 hover:bg-pinky-100 transition-colors"
-                  aria-label="Keluar dari simulasi"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            </>
+            <div className="hidden md:flex items-center gap-1.5">
+              <button
+                onClick={() => go('profil')}
+                className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${page === 'profil'
+                    ? 'bg-gradient-to-br from-primary-500 to-pinky-400 text-white shadow-soft'
+                    : 'bg-primary-50 border border-primary-200 text-primary-600 hover:bg-primary-100'
+                  }`}
+                title="Profil Saya"
+              >
+                <User className="w-4 h-4" />
+              </button>
+              <button
+                onClick={onRequestLogout}
+                className="inline-flex items-center gap-1.5 rounded-full bg-pinky-50 border border-pinky-200 px-3 py-1.5 text-xs font-bold text-pinky-600 hover:bg-pinky-100 transition-colors shadow-soft"
+                title="Keluar (Simulasi)"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                Keluar
+              </button>
+            </div>
           ) : (
             <button
               onClick={() => go('simpanan')}
@@ -159,23 +128,13 @@ export default function Navbar({ page, onNavigate, onRequestLogout }: NavbarProp
             <div className="pt-2 border-t border-primary-100 space-y-2">
               <button
                 onClick={() => go('profil')}
-                className="w-full text-left flex items-center justify-between gap-2 px-3 py-2.5 rounded-2xl bg-gradient-to-r from-primary-50 to-pinky-50 border border-primary-200 hover:shadow-soft transition-all"
+                className={`w-full text-left flex items-center gap-2 px-3 py-2.5 rounded-2xl transition-all ${page === 'profil'
+                    ? 'bg-gradient-to-r from-primary-100 to-pinky-100 text-primary-800'
+                    : 'bg-primary-50 border border-primary-200 hover:shadow-soft text-ink'
+                  }`}
               >
-                <div className="flex items-center gap-2 min-w-0">
-                  <span className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-pinky-400 flex items-center justify-center text-xs font-extrabold text-white">
-                    {userInitial}
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-xs font-bold text-ink truncate">{account.name || 'Nasabah BLINK'}</p>
-                    <p className="text-[10px] text-primary-700 font-semibold flex items-center gap-1">
-                      <User className="w-3 h-3" />
-                      Kelola Profil Saya
-                    </p>
-                  </div>
-                </div>
-                <span className="text-[11px] font-bold text-primary-700 bg-white border border-primary-200 rounded-full px-2.5 py-1">
-                  Buka
-                </span>
+                <User className="w-4 h-4 text-primary-600" />
+                <span className="text-xs font-bold">Profil Saya</span>
               </button>
               <button
                 onClick={onRequestLogout}

@@ -13,7 +13,7 @@ import ProfilePage from '@/pages/ProfilePage';
 function Shell() {
   const [page, setPage] = useState<PageKey>('beranda');
   const [logoutOpen, setLogoutOpen] = useState(false);
-  const { account, sessionEnded, resumeSession, resetForNewAccount } = useBank();
+  const { account, sessionEnded, resumeSession, resetForNewAccount, logout } = useBank();
 
   const navigate = (p: PageKey) => setPage(p);
 
@@ -55,6 +55,7 @@ function Shell() {
           onClose={() => setLogoutOpen(false)}
           onConfirm={() => {
             setLogoutOpen(false);
+            logout();
             setPage('beranda');
             window.scrollTo({ top: 0 });
           }}
