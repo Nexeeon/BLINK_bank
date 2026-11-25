@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CreditCard, Store, CheckCircle2, Sparkles, FileCheck2 } from 'lucide-react';
+import { CreditCard, Store, CheckCircle2, FileCheck2, ArrowRight } from 'lucide-react';
 import Modal from '@/components/Modal';
 import Binky from '@/components/Binky';
 import { useBank } from '@/context/BankContext';
@@ -203,7 +203,7 @@ export default function CreditPage() {
               </div>
 
               <button onClick={() => setModal(c.kind)} className="btn-primary w-full mt-6 !text-sm">
-                <Sparkles className="w-4 h-4" />
+                <FileCheck2 className="w-4 h-4" />
                 Ajukan Sekarang
               </button>
             </div>

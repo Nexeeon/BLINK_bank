@@ -1,12 +1,23 @@
-import { ExternalLink, Briefcase, FileText, ShieldCheck, Building2 } from 'lucide-react';
+import { Briefcase, FileText, ShieldCheck, Building2, CheckCircle2, PartyPopper } from 'lucide-react';
 import { useState } from 'react';
 import Modal from '@/components/Modal';
 import Binky from '@/components/Binky';
-
-const GIRO_FORM_URL = 'https://forms.google.com/contoh-giro-blink';
+import { useBank } from '@/context/BankContext';
 
 export default function GiroSection() {
+  const { showToast } = useBank();
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = () => {
+    setSubmitted(true);
+    showToast('Simulasi pengajuan Giro BLINK BizGiro berhasil dikirim!');
+  };
+
+  const handleClose = () => {
+    setConfirmOpen(false);
+    setTimeout(() => setSubmitted(false), 300);
+  };
 
   return (
     <div className="mt-10 animate-pop-in grid lg:grid-cols-2 gap-6 items-stretch">
@@ -64,7 +75,7 @@ export default function GiroSection() {
           </div>
 
           <button onClick={() => setConfirmOpen(true)} className="btn-primary w-full mt-6">
-            <ExternalLink className="w-4 h-4" />
+            <Briefcase className="w-4 h-4" />
             Simulasi Pembukaan Rekening Giro
           </button>
         </div>
@@ -93,35 +104,61 @@ export default function GiroSection() {
         </div>
       </div>
 
-      <Modal open={confirmOpen} onClose={() => setConfirmOpen(false)} title="Simulasi Buka Rekening Giro">
-        <div className="text-center">
-          <div className="flex justify-center">
-            <Binky size={120} mood="business" accessory="tie" />
-          </div>
-          <p className="mt-3 text-sm text-inkSoft leading-relaxed">
-            Untuk simulasi pembukaan rekening Giro <strong>BLINK BizGiro</strong>, kamu akan
-            diarahkan ke formulir pendaftaran (Google Form). Siapkan{' '}
-            <strong>e-KTP pengurus, NPWP, dan NIB/SIUP</strong> kamu, ya!
-          </p>
-          <div className="mt-4 rounded-2xl bg-pinky-50 border border-pinky-100 px-4 py-3 text-left">
-            <p className="text-xs font-bold text-inkSoft uppercase tracking-wide">Tujuan Formulir</p>
-            <p className="text-xs text-primary-700 font-semibold break-all mt-0.5">{GIRO_FORM_URL}</p>
-          </div>
-          <div className="mt-5 flex gap-3">
-            <button onClick={() => setConfirmOpen(false)} className="btn-outline flex-1 !text-sm">
-              Nanti Dulu
+      <Modal open={confirmOpen} onClose={handleClose} title={submitted ? 'Pengajuan Terkirim!' : 'Simulasi Buka Rekening Giro'}>
+        {submitted ? (
+          <div className="text-center py-4">
+            <div className="flex justify-center animate-float">
+              <Binky size={150} mood="business" accessory="tie" />
+            </div>
+            <h4 className="mt-3 text-xl font-extrabold flex items-center justify-center gap-2">
+              <PartyPopper className="w-5 h-5 text-pinky-500" />
+              Yeay, Pengajuan Giro Diterima!
+            </h4>
+            <p className="mt-2 text-sm text-inkSoft leading-relaxed">
+              Berkas simulasi pembukaan rekening Giro <strong>BLINK BizGiro</strong> telah berhasil dicatat. Binky dan tim bisnis BLINK siap mendampingi operasional usahamu!
+            </p>
+            <button onClick={handleClose} className="btn-primary mt-6 w-full">
+              Selesai & Tutup
             </button>
-            <a
-              href={GIRO_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary flex-1 !text-sm"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Lanjut ke Form
-            </a>
           </div>
-        </div>
+        ) : (
+          <div className="text-center">
+            <div className="flex justify-center">
+              <Binky size={120} mood="business" accessory="tie" />
+            </div>
+            <p className="mt-3 text-sm text-inkSoft leading-relaxed">
+              Untuk pembukaan rekening Giro <strong>BLINK BizGiro</strong>, pastikan kamu telah menyiapkan{' '}
+              <strong>e-KTP pengurus, NPWP, dan NIB/SIUP</strong> perusahaan.
+            </p>
+            <div className="mt-4 rounded-2xl bg-pinky-50 border border-pinky-100 px-4 py-3 text-left space-y-1.5 text-xs text-inkSoft">
+              <p className="font-bold text-pinky-700 uppercase tracking-wide">Ringkasan Ketentuan Giro:</p>
+              <p className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-pinky-500 shrink-0" />
+                Setoran Awal: Rp 1.000.000
+              </p>
+              <p className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-pinky-500 shrink-0" />
+                Biaya Administrasi: Rp 25.000 / bulan
+              </p>
+              <p className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-pinky-500 shrink-0" />
+                Fasilitas: Cek / Bilyet Giro & E-Statement Bulanan
+              </p>
+            </div>
+            <div className="mt-5 flex gap-3">
+              <button onClick={handleClose} className="btn-outline flex-1 !text-sm">
+                Nanti Dulu
+              </button>
+              <button
+                onClick={handleSubmit}
+                className="btn-primary flex-1 !text-sm"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                Kirim Pengajuan
+              </button>
+            </div>
+          </div>
+        )}
       </Modal>
     </div>
   );

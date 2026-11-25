@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { ExternalLink, ShieldCheck, Sparkles, TrendingUp } from 'lucide-react';
+import { CheckCircle2, ShieldCheck, Vault, TrendingUp } from 'lucide-react';
 import Binky from '@/components/Binky';
-import { formatRupiah, parseRupiah } from '@/lib/format';
+import { formatRupiah } from '@/lib/format';
 import Modal from '@/components/Modal';
-
-const DEPO_FORM_URL = 'https://forms.google.com/contoh-deposito-blink';
 
 const tenors = [
   { months: 1, rate: 4.5, label: '1 Bulan' },
@@ -17,11 +15,24 @@ export default function DepositoSection() {
   const [nominal, setNominal] = useState(10000000);
   const [tenorIdx, setTenorIdx] = useState(3);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [refCode, setRefCode] = useState('');
 
   const tenor = tenors[tenorIdx];
   const interest = Math.round((nominal * tenor.rate * tenor.months) / (12 * 100));
   const total = nominal + interest;
   const monthlyAvg = Math.round(interest / tenor.months);
+
+  const handleSubmit = () => {
+    const code = 'DEP-' + Math.floor(100000 + Math.random() * 900000);
+    setRefCode(code);
+    setSubmitted(true);
+  };
+
+  const handleClose = () => {
+    setConfirmOpen(false);
+    setSubmitted(false);
+  };
 
   return (
     <div className="mt-10 animate-pop-in grid lg:grid-cols-2 gap-6 items-stretch">
@@ -31,7 +42,7 @@ export default function DepositoSection() {
         <div className="relative">
           <div className="flex items-center gap-3">
             <span className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-700 to-pinky-500 flex items-center justify-center shadow-soft">
-              <Sparkles className="w-7 h-7 text-white" />
+              <Vault className="w-7 h-7 text-white" />
             </span>
             <div>
               <h3 className="text-xl font-extrabold">BLINK TimeVault</h3>
@@ -157,41 +168,86 @@ export default function DepositoSection() {
         </div>
 
         <button onClick={() => setConfirmOpen(true)} className="btn-primary w-full mt-5">
-          <ExternalLink className="w-4 h-4" />
+          <Vault className="w-4 h-4" />
           Buka Deposito Sekarang
         </button>
       </div>
 
-      <Modal open={confirmOpen} onClose={() => setConfirmOpen(false)} title="Simulasi Buka Deposito">
-        <div className="text-center">
-          <div className="flex justify-center">
-            <Binky size={120} mood="chill" accessory="shield" />
-          </div>
-          <p className="mt-3 text-sm text-inkSoft leading-relaxed">
-            Untuk pembukaan deposito <strong>BLINK TimeVault</strong>, kamu akan diarahkan ke
-            formulir pendaftaran (Google Form). Estimasi temuanmu:{' '}
-            <strong>{formatRupiah(nominal)}</strong> selama <strong>{tenor.label}</strong> dengan
-            bunga <strong>{tenor.rate.toLocaleString('id-ID')}% p.a.</strong>
-          </p>
-          <div className="mt-4 rounded-2xl bg-primary-50 border border-primary-100 px-4 py-3 text-left">
-            <p className="text-xs font-bold text-inkSoft uppercase tracking-wide">Tujuan Formulir</p>
-            <p className="text-xs text-primary-700 font-semibold break-all mt-0.5">{DEPO_FORM_URL}</p>
-          </div>
-          <div className="mt-5 flex gap-3">
-            <button onClick={() => setConfirmOpen(false)} className="btn-outline flex-1 !text-sm">
-              Nanti Dulu
+      <Modal open={confirmOpen} onClose={handleClose} title={submitted ? "Pengajuan Berhasil" : "Simulasi Buka Deposito"}>
+        {submitted ? (
+          <div className="text-center animate-pop-in">
+            <div className="flex justify-center">
+              <Binky size={120} mood="happy" accessory="shield" />
+            </div>
+            <h4 className="text-lg font-extrabold text-ink mt-3">Pengajuan Deposito Terkirim!</h4>
+            <p className="mt-2 text-sm text-inkSoft leading-relaxed">
+              Pengajuan <strong>BLINK TimeVault</strong> sebesar{' '}
+              <strong className="text-primary-700">{formatRupiah(nominal)}</strong> untuk tenor{' '}
+              <strong>{tenor.label}</strong> telah berhasil dibuat.
+            </p>
+            <div className="mt-4 rounded-2xl bg-primary-50 border border-primary-100 p-4 text-left space-y-1.5 text-xs text-inkSoft">
+              <div className="flex justify-between">
+                <span>No. Pengajuan:</span>
+                <span className="font-mono font-bold text-primary-700">{refCode}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Estimasi Bagi Hasil:</span>
+                <span className="font-bold text-emerald-600">{formatRupiah(interest)} ({tenor.rate.toLocaleString('id-ID')}%)</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Total Saat Jatuh Tempo:</span>
+                <span className="font-extrabold text-primary-800">{formatRupiah(total)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Status Jaminan:</span>
+                <span className="font-bold text-ink">Dijamin LPS 100%</span>
+              </div>
+            </div>
+            <button onClick={handleClose} className="btn-primary mt-6 w-full">
+              Selesai & Tutup
             </button>
-            <a
-              href={DEPO_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary flex-1 !text-sm"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Lanjut ke Form
-            </a>
           </div>
-        </div>
+        ) : (
+          <div className="text-center">
+            <div className="flex justify-center">
+              <Binky size={120} mood="chill" accessory="shield" />
+            </div>
+            <p className="mt-3 text-sm text-inkSoft leading-relaxed">
+              Konfirmasi pembukaan simpanan berjangka <strong>BLINK TimeVault</strong> dengan rincian
+              sebagai berikut:
+            </p>
+            <div className="mt-4 rounded-2xl bg-primary-50 border border-primary-100 px-4 py-3 text-left space-y-2 text-xs">
+              <div className="flex justify-between">
+                <span className="text-inkSoft">Nominal Penempatan:</span>
+                <span className="font-bold text-primary-700">{formatRupiah(nominal)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-inkSoft">Pilihan Tenor:</span>
+                <span className="font-bold text-ink">{tenor.label}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-inkSoft">Suku Bunga p.a.:</span>
+                <span className="font-bold text-emerald-600">{tenor.rate.toLocaleString('id-ID')}% p.a.</span>
+              </div>
+              <div className="flex justify-between border-t border-primary-200/60 pt-1.5">
+                <span className="font-bold text-ink">Estimasi Diterima:</span>
+                <span className="font-extrabold text-primary-800">{formatRupiah(total)}</span>
+              </div>
+            </div>
+            <div className="mt-5 flex gap-3">
+              <button onClick={handleClose} className="btn-outline flex-1 !text-sm">
+                Nanti Dulu
+              </button>
+              <button
+                onClick={handleSubmit}
+                className="btn-primary flex-1 !text-sm"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                Konfirmasi Buka
+              </button>
+            </div>
+          </div>
+        )}
       </Modal>
     </div>
   );

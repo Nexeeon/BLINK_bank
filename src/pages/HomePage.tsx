@@ -1,4 +1,4 @@
-import { ArrowRight, TrendingUp, QrCode, Send, CreditCard, Landmark, Percent, BadgeCheck, Clock3, Sparkles } from 'lucide-react';
+import { ArrowRight, TrendingUp, QrCode, Send, CreditCard, Landmark, ShieldCheck, BadgeCheck, Clock3 } from 'lucide-react';
 import Binky from '@/components/Binky';
 import type { PageKey } from '@/components/Navbar';
 
@@ -10,11 +10,12 @@ export default function HomePage({ onNavigate }: HomePageProps) {
   const pillars = [
     {
       title: 'Simpanan',
-      desc: 'Tabungan, Giro & Deposito dengan bunga kompetitif.',
+      desc: 'Tabungan, simpanan bebas bunga 0%, giro & deposito.',
       icon: Landmark,
       accent: 'from-primary-100 to-primary-50',
       iconBg: 'bg-primary-500',
       action: 'Lihat Produk Simpanan',
+      page: 'simpanan' as PageKey,
     },
     {
       title: 'Kredit',
@@ -23,29 +24,32 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       accent: 'from-pinky-100 to-pinky-50',
       iconBg: 'bg-pinky-400',
       action: 'Jelajahi Kredit',
+      page: 'kredit' as PageKey,
     },
     {
       title: 'Transfer & Top Up',
-      desc: 'Kirim uang & isi e-wallet kapan saja, gratis biaya.',
+      desc: 'Kirim uang termasuk ke Bank Cheeko & isi e-wallet 24/7.',
       icon: Send,
       accent: 'from-primary-200/60 to-primary-50',
       iconBg: 'bg-primary-600',
       action: 'Coba Simulasi Transfer',
+      page: 'layanan' as PageKey,
     },
     {
       title: 'Pembayaran & QRIS',
-      desc: 'Bayar tagihan & scan QRIS dalam sekejap mata.',
+      desc: 'Scan QRIS kamera/gambar & bayar tagihan dalam sekejap.',
       icon: QrCode,
       accent: 'from-pinky-200/60 to-pinky-50',
       iconBg: 'bg-pinky-500',
-      action: 'Simulasi QRIS',
+      action: 'Simulasi Scan QRIS',
+      page: 'layanan' as PageKey,
     },
   ];
 
   const advantages = [
-    { icon: Percent, title: 'Bunga Kompetitif', desc: 'Tabungan 3,5% p.a. & deposito hingga 6% p.a.' },
-    { icon: BadgeCheck, title: 'Bebas Biaya Admin', desc: 'Tanpa biaya admin tersembunyi. Serius, Rp 0.' },
-    { icon: Clock3, title: 'Transaksi 24/7', desc: 'Semua layanan digital aktif kapan pun kamu butuh.' },
+    { icon: ShieldCheck, title: 'Inovasi Simpanan', desc: 'Pilihan simpanan murni bebas bunga 0% & deposito hingga 6% p.a.' },
+    { icon: BadgeCheck, title: 'Bebas Biaya Admin', desc: 'Tanpa biaya admin tersembunyi. Serius, Rp 0 selamanya.' },
+    { icon: Clock3, title: 'Transaksi 24/7', desc: 'Semua layanan digital aktif kapan pun kamu butuhkan.' },
   ];
 
   return (
@@ -53,13 +57,13 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-100 via-pinky-100 to-primary-50" />
-        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-pinky-200/40 blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-primary-200/40 blur-3xl" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-pinky-200/40 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-primary-200/40 blur-3xl pointer-events-none" />
 
         <div className="relative max-w-6xl mx-auto px-5 pt-28 pb-16 md:pt-36 md:pb-24 grid md:grid-cols-2 gap-10 items-center">
           <div>
             <span className="section-badge">
-              <Sparkles className="w-3.5 h-3.5" />
+              <ShieldCheck className="w-3.5 h-3.5" />
               Bank Digital Pilihan Gen-Z & UMKM
             </span>
             <h1 className="mt-4 text-4xl md:text-6xl font-extrabold leading-[120%] tracking-tight">
@@ -80,7 +84,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 Buka Tabungan Sekarang
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </button>
-              <button onClick={() => onNavigate('simpanan')} className="btn-outline">
+              <button onClick={() => onNavigate('tentang')} className="btn-outline">
                 Kenalan sama BLINK
               </button>
             </div>
@@ -120,8 +124,8 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   <TrendingUp className="w-4 h-4 text-primary-600" />
                 </span>
                 <div>
-                  <p className="text-xs font-bold text-ink">Bunga naik</p>
-                  <p className="text-sm font-extrabold text-primary-700">3,5% p.a.</p>
+                  <p className="text-xs font-bold text-ink">Bunga Deposito</p>
+                  <p className="text-sm font-extrabold text-primary-700">Hingga 6% p.a.</p>
                 </div>
               </div>
 
@@ -149,7 +153,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           {pillars.map((p) => (
             <button
               key={p.title}
-              onClick={() => onNavigate(p.title === 'Kredit' ? 'kredit' : p.title === 'Simpanan' ? 'simpanan' : 'layanan')}
+              onClick={() => onNavigate(p.page)}
               className={`group text-left rounded-bento bg-gradient-to-br ${p.accent} border border-white/80 p-6 shadow-soft transition-all duration-300 hover:-translate-y-2 hover:shadow-lift`}
             >
               <span
@@ -188,47 +192,33 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </section>
 
-      {/* Bank Profile */}
+      {/* Profil Perusahaan Teaser Card */}
       <section className="max-w-6xl mx-auto px-5 pb-24">
         <div className="rounded-bento-lg bg-gradient-to-br from-primary-100 via-pinky-50 to-primary-50 border border-white/80 p-8 md:p-12 shadow-soft relative overflow-hidden">
-          <div className="absolute -bottom-16 -right-16 w-72 h-72 rounded-full bg-pinky-200/30 blur-3xl" />
+          <div className="absolute -bottom-16 -right-16 w-72 h-72 rounded-full bg-pinky-200/30 blur-3xl pointer-events-none" />
           <div className="relative grid lg:grid-cols-[1fr_auto] gap-8 items-center">
             <div>
-              <span className="section-badge !bg-white/80">Profil Bank</span>
+              <span className="section-badge !bg-white/80">Tentang BLINK</span>
               <h2 className="mt-3 text-2xl md:text-4xl font-extrabold tracking-tight">
-                Kenalan Lebih Dekat sama BLINK
+                Kenalan Lebih Dekat sama BLINK Digital Bank
               </h2>
-              <p className="mt-3 text-inkSoft leading-relaxed max-w-2xl">
-                BLINK adalah bank digital konvensional fiktif yang mengusung semangat menabung
-                modern dan inklusif. 100% layanan digital tanpa antre di kantor cabang,
-                transparan, dan bebas biaya admin tersembunyi — dibuat untuk Gen-Z, profesioanal
-                muda, dan pelaku UMKM.
+              <p className="mt-3 text-inkSoft leading-relaxed max-w-2xl text-sm md:text-base">
+                Temukan filosofi di balik slogan <strong>"Smart Banking, Happy Living"</strong>, visi & misi kami dalam memberdayakan nasabah serta pelaku UMKM, dan nilai-nilai inti yang menjadikan BLINK sahabat finansial digital terbaikmu.
               </p>
-              <div className="mt-6 grid sm:grid-cols-3 gap-3">
-                {[
-                  { title: 'Jenis Bank', desc: 'Digital Konvensional' },
-                  { title: 'Segmentasi', desc: 'Individu, Gen-Z & UMKM' },
-                  { title: 'Model Layanan', desc: '100% Digital Self-Service' },
-                ].map((i) => (
-                  <div key={i.title} className="rounded-2xl bg-white/80 border border-white px-4 py-3">
-                    <p className="text-[10px] font-bold text-inkSoft uppercase tracking-wide">{i.title}</p>
-                    <p className="text-sm font-extrabold mt-0.5">{i.desc}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 grid sm:grid-cols-2 gap-3">
-                <div className="rounded-2xl bg-primary-500/10 border border-primary-200/50 px-5 py-4">
-                  <p className="text-xs font-extrabold text-primary-700 uppercase tracking-wide">Visi</p>
-                  <p className="text-sm text-ink mt-1 leading-relaxed">
-                    Jadi bank digital paling dekat dengan keseharian generasi muda Indonesia.
-                  </p>
-                </div>
-                <div className="rounded-2xl bg-pinky-400/10 border border-pinky-200/50 px-5 py-4">
-                  <p className="text-xs font-extrabold text-pinky-700 uppercase tracking-wide">Misi</p>
-                  <p className="text-sm text-ink mt-1 leading-relaxed">
-                    Nabung & transaksi jadi mudah, murah, dan menyenangkan lewat pengalaman digital penuh warna.
-                  </p>
-                </div>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <button
+                  onClick={() => onNavigate('tentang')}
+                  className="btn-primary group"
+                >
+                  Buka Halaman Tentang Kami
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </button>
+                <button
+                  onClick={() => onNavigate('simpanan')}
+                  className="btn-outline"
+                >
+                  Lihat Produk Simpanan
+                </button>
               </div>
             </div>
             <div className="flex flex-col items-center">
@@ -236,7 +226,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 <Binky size={190} mood="wink" />
               </div>
               <p className="mt-2 text-xs text-inkSoft text-center max-w-[12rem]">
-                "Hai, aku <strong>Binky</strong>! Aku di sini buat nemenin perjalanan duitmu."
+                "Yuk kenalan lebih dekat di halaman <strong>Tentang Kami</strong>!"
               </p>
             </div>
           </div>

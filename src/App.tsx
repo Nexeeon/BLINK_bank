@@ -4,9 +4,11 @@ import LogoutModal from '@/components/LogoutModal';
 import SessionEndedScreen from '@/components/SessionEndedScreen';
 import { BankProvider, useBank } from '@/context/BankContext';
 import HomePage from '@/pages/HomePage';
+import AboutPage from '@/pages/AboutPage';
 import SavingsPage from '@/pages/SavingsPage';
 import ServicesPage from '@/pages/ServicesPage';
 import CreditPage from '@/pages/CreditPage';
+import ProfilePage from '@/pages/ProfilePage';
 
 function Shell() {
   const [page, setPage] = useState<PageKey>('beranda');
@@ -35,9 +37,11 @@ function Shell() {
       <Navbar page={page} onNavigate={navigate} onRequestLogout={() => setLogoutOpen(true)} />
       <main>
         {page === 'beranda' && <HomePage onNavigate={navigate} />}
+        {page === 'tentang' && <AboutPage onNavigate={navigate} />}
         {page === 'simpanan' && <SavingsPage />}
         {page === 'layanan' && <ServicesPage />}
         {page === 'kredit' && <CreditPage />}
+        {page === 'profil' && <ProfilePage onNavigate={navigate} />}
       </main>
       <footer className="border-t border-primary-100 bg-white/60 backdrop-blur">
         <div className="max-w-6xl mx-auto px-5 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-inkSoft">

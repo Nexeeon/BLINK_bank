@@ -9,6 +9,12 @@ export interface Account {
   email: string;
   number: string;
   balance: number;
+  productType?: 'savers' | 'puresave';
+  productName?: string;
+  birthDate?: string;
+  occupation?: string;
+  address?: string;
+  pin?: string;
 }
 
 export interface Transaction {
@@ -23,6 +29,7 @@ export interface Transaction {
 interface BankState {
   account: Account | null;
   setAccount: (a: Account | null) => void;
+  updateAccount: (data: Partial<Account>) => void;
   balanceVisible: boolean;
   setBalanceVisible: (v: boolean) => void;
   transactions: Transaction[];
@@ -53,6 +60,12 @@ export function BankProvider({ children }: { children: React.ReactNode }) {
     setTimeout(() => setToast(null), 2600);
   };
 
+  const updateAccount = (data: Partial<Account>) => {
+    if (!account) return;
+    const updated: Account = { ...account, ...data };
+    setAccount(updated);
+  };
+
   const addTransaction = (t: Omit<Transaction, 'id' | 'timestamp'>): boolean => {
     if (!account) return false;
     if (t.amount < 0 && account.balance + t.amount < 0) {
@@ -70,6 +83,7 @@ export function BankProvider({ children }: { children: React.ReactNode }) {
       value={{
         account,
         setAccount,
+        updateAccount,
         balanceVisible,
         setBalanceVisible,
         transactions,

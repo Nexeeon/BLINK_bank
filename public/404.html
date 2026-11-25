@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>BLINK Digital Bank — Redirecting...</title>
+  <script>
+    (function() {
+      var path = window.location.pathname.replace(/^\//, '');
+      var query = window.location.search || '';
+      var hash = window.location.hash || '';
+      if (path) {
+        window.location.replace('/#' + path + (query ? '?' + query : '') + hash);
+      } else {
+        window.location.replace('/' + query + hash);
+      }
+    })();
+  </script>
+</head>
+<body style="font-family: sans-serif; text-align: center; padding-top: 50px; background: #FAF8FF; color: #1E1B4B;">
+  <p>Memuat BLINK Digital Bank...</p>
+</body>
+</html>
+

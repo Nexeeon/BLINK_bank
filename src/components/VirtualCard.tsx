@@ -11,16 +11,20 @@ export default function VirtualCard() {
 
   if (!account) return null;
 
-  const maskedNumber = () => `•••• •••• •••• ${account.number.slice(-4)}`;
+  const safeNumber = account.number || '8888000012';
+  const safeName = account.name || 'Nasabah BLINK';
+  const safeBalance = account.balance ?? 0;
+
+  const maskedNumber = () => `•••• •••• •••• ${safeNumber.slice(-4)}`;
 
   const copyNumber = () => {
-    navigator.clipboard?.writeText(account.number).catch(() => {});
+    navigator.clipboard?.writeText(safeNumber).catch(() => {});
     setCopied(true);
     showToast('Nomor rekening disalin!');
     setTimeout(() => setCopied(false), 1500);
   };
 
-  const cvv = account.number.slice(-3).padStart(3, '9');
+  const cvv = safeNumber.slice(-3).padStart(3, '9');
 
   return (
     <div className="[perspective:1400px]">
@@ -45,6 +49,11 @@ export default function VirtualCard() {
                     <span className="block w-3 h-3 rounded-full bg-gradient-to-br from-primary-500 to-pinky-400" />
                   </span>
                   <p className="text-lg font-extrabold tracking-tight">BLINK.</p>
+                  {account.productType === 'puresave' && (
+                    <span className="text-[9px] font-extrabold bg-white/20 backdrop-blur-sm px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+                      PureSave
+                    </span>
+                  )}
                 </div>
                 <p className="text-[9px] font-semibold tracking-[0.18em] uppercase mt-0.5 opacity-90">
                   Smart Banking, Happy Living
@@ -55,19 +64,19 @@ export default function VirtualCard() {
 
             <p className="text-base md:text-lg font-bold tracking-[0.18em] tabular-nums" data-number>
               {balanceVisible
-                ? account.number.replace(/(\d{4})(?=\d)/g, '$1 ')
+                ? safeNumber.replace(/(\d{4})(?=\d)/g, '$1 ')
                 : maskedNumber()}
             </p>
 
             <div className="flex items-end justify-between">
               <div>
                 <p className="text-[9px] uppercase tracking-[0.15em] opacity-75">Nama Nasabah</p>
-                <p className="text-sm font-bold max-w-[10rem] truncate uppercase">{account.name}</p>
+                <p className="text-sm font-bold max-w-[10rem] truncate uppercase">{safeName}</p>
               </div>
               <div className="text-right">
                 <p className="text-[9px] uppercase tracking-[0.15em] opacity-75">Saldo</p>
                 <p className="text-lg font-extrabold tabular-nums">
-                  {balanceVisible ? formatRupiah(account.balance) : 'Rp •••••••'}
+                  {balanceVisible ? formatRupiah(safeBalance) : 'Rp •••••••'}
                 </p>
               </div>
             </div>
